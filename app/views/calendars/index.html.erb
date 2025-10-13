@@ -1,4 +1,4 @@
-<div>
+
   <%= form_with model: @plan, url: calendars_path, class: 'form' do |f| %>
     <%= f.label :日付を選択, class: 'label' %>
     <%= f.date_field :date, class: 'date-select' %>
@@ -8,14 +8,16 @@
 
     <%= f.submit '保存' %>
   <% end %>
+
 </div>
 
 <div>
+
   <div class='calendar'>
     <% @week_days.each do |day| %>
       <div class='item'>
         <div class='date'>
-          <%= day[:month] %>/<%= day[:date] %><%= day[:wday] %>
+          <%= day[:month] %>/<%= day[:date] %>
         </div>
 
         <ul class='content'>
@@ -27,5 +29,4 @@
         </ul>
       </div>
     <% end %>
-  </div>
-</div>
+ </div>
