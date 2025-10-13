@@ -31,11 +31,11 @@ class CalendarsController < ApplicationController
     plans = Plan.where(date: @todays_date..@todays_date + 6)
 
     7.times do |x|
-      today_plans = []
-      plans.each do |plan|
-        today_plans.push(plan.plan) if plan.date == @todays_date + x
-      end
-      days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, :plans => today_plans}
+      day_date = @todays_date + x       # ← 日付オブジェクトを作成
+      today_plans = plans.select { |plan| plan.date == day_date }.map(&:plan)
+      
+      wday_num = day_date.wday % 7
+      days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, wday: wdays[wday_num], :plans => today_plans}
       @week_days.push(days)
     end
 
