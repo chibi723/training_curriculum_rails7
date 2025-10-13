@@ -15,33 +15,33 @@ class CalendarsController < ApplicationController
   private
 
   def plan_params
-    params.require(:calendar).permit(:date, :plan)
+    # モデル名が Plan なので、require(:plan) に修正
+    params.require(:plan).permit(:date, :plan)
   end
 
   def set_week_days
-    wdays = ['(日)','(月)','(火)','(水)','(木)','(金)','(土)']
+    wdays = ['(日)', '(月)', '(火)', '(水)', '(木)', '(金)', '(土)']
 
-    # Dateオブジェクトは、日付を保持しています。下記のように`.today.day`とすると、今日の日付を取得できます。
     @today = Date.today
-    # 例)　今日が2月1日の場合・・・ Date.today.day => 1日
-
     @week_days = []
 
+    # 今日から6日後までの予定を取得
     plans = Plan.where(date: @today..@today + 6)
 
-
+    # 1週間分の日付を作成して代入
     7.times do |x|
-      day_date = @todays_date + x       # ← 日付オブジェクトを作成
+      day_date = @today + x
       today_plans = plans.select { |plan| plan.date == day_date }.map(&:plan)
-      wday_num = day_date.wday % 7
 
-      days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, wday: wdays[wday_num], :plans => today_plans}
+      wday_num = day_date.wday
+      days = {
+        month: day_date.month,
+        date: day_date.day,
+        wday: wdays[wday_num],
+        plans: today_plans
+      }
+
       @week_days.push(days)
-    7.times do |offset|
-      today_plans = []
-      plans.each do |plan|
-        today_plans << plan.plan if plan.date == @today + offset
-      end
     end
   end
 end
