@@ -42,9 +42,6 @@ class CalendarsController < ApplicationController
       plans.each do |plan|
         today_plans << plan.plan if plan.date == @today + offset
       end
-      days = { month: (@today + offset).month, date: (@today + offset).day, plans: today_plans }
-      @week_days << days
-
     end
   end
 end
