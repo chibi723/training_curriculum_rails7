@@ -8,7 +8,6 @@ class CalendarsController < ApplicationController
 
   # 予定の保存
   def create
-    binding.pry
     Plan.create(plan_params)
     redirect_to action: :index
   end
@@ -33,8 +32,8 @@ class CalendarsController < ApplicationController
     7.times do |x|
       day_date = @todays_date + x       # ← 日付オブジェクトを作成
       today_plans = plans.select { |plan| plan.date == day_date }.map(&:plan)
-      
       wday_num = day_date.wday % 7
+
       days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, wday: wdays[wday_num], :plans => today_plans}
       @week_days.push(days)
     end
