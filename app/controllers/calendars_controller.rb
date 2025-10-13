@@ -8,7 +8,6 @@ class CalendarsController < ApplicationController
 
   # 予定の保存
   def create
-    binding.pry
     Plan.create(plan_params)
     redirect_to action: :index
   end
@@ -16,10 +15,7 @@ class CalendarsController < ApplicationController
   private
 
   def plan_params
-
-    params.require(:plan).permit(:date, :plan)
     params.require(:calendar).permit(:date, :plan)
-
   end
 
   def set_week_days
@@ -33,14 +29,6 @@ class CalendarsController < ApplicationController
 
     plans = Plan.where(date: @today..@today + 6)
 
-
-    7.times do |x|
-      day_date = @todays_date + x       # ← 日付オブジェクトを作成
-      today_plans = plans.select { |plan| plan.date == day_date }.map(&:plan)
-      
-      wday_num = day_date.wday % 7
-      days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, wday: wdays[wday_num], :plans => today_plans}
-      @week_days.push(days)
     7.times do |offset|
       today_plans = []
       plans.each do |plan|
@@ -48,7 +36,6 @@ class CalendarsController < ApplicationController
       end
       days = { month: (@today + offset).month, date: (@today + offset).day, plans: today_plans }
       @week_days << days
-
     end
   end
 end
